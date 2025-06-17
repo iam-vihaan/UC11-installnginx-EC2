@@ -123,12 +123,6 @@ jobs:
         run: terraform plan -no-color -input=false
         continue-on-error: true
 
-      - name: Setup Node.js
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
       - name: Install terraform-docs
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
