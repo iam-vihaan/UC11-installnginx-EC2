@@ -1,11 +1,11 @@
 provider "aws" {
-  region = "us-east-1"  # Change to your preferred region
+  region = "var.aws_region"
 }
 
-resource "aws_instance" "web" {
-  ami           = "ami-0c55b159cbfafe1f0"  # Amazon Linux 2 AMI (update as needed)
-  instance_type = "t2.micro"
-  key_name      = "your-key-name"  # Replace with your existing key pair name
+resource "aws_instance" "nginx" {
+  ami           = var.ami_id 
+  instance_type = var.instance_type
+  key_name      = var.key_name  
 
    user_data = <<-EOF
               #!/bin/bash
@@ -17,14 +17,14 @@ resource "aws_instance" "web" {
               EOF
 
   tags = {
-    Name = "Terraform-EC2-Docker"
+    Name = "Terraform-EC2-nginx"
   }
 
-  security_groups = [aws_security_group.ssh.name]
+  security_groups = [aws_security_group.nginx-sg.name]
 }
 
-resource "aws_security_group" "ssh" {
-  name        = "allow_ssh_http"
+resource "aws_security_group" "nginx-sg" {
+  name        = "nginx-sg"
   description = "Allow SSH and HTTP inbound traffic"
 
   ingress {
